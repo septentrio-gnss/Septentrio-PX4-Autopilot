@@ -1,4 +1,4 @@
-![](/home/seppe/Documents/Septentrio-PX4-Autopilot/readme_assets/px4-septentrio-banner.png "PX4 Septentrio banner")
+![](readme_assets/px4-septentrio-banner.png "PX4 Septentrio banner")
 # PX4 Autopilot
 
 This repository is a fork from the official [PX4-Autopilot](https://github.com/PX4/PX4-Autopilot) with verified drivers for Septentrio receivers.
