@@ -34,11 +34,11 @@
 px4_add_git_submodule(TARGET git_gps_devices PATH "devices")
 
 px4_add_module(
-	MODULE drivers__gps
-	MAIN gps
-	COMPILE_FLAGS
+		MODULE drivers__gps
+		MAIN gps
+		COMPILE_FLAGS
 		-Wno-stringop-overflow # due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91707
-	SRCS
+		SRCS
 		gps.cpp
 		devices/src/gps_helper.cpp
 		devices/src/mtk.cpp
@@ -48,8 +48,9 @@ px4_add_module(
 		devices/src/emlid_reach.cpp
 		devices/src/femtomes.cpp
 		devices/src/nmea.cpp
-	MODULE_CONFIG
+		devices/src/sbf.cpp
+		MODULE_CONFIG
 		module.yaml
-	DEPENDS
+		DEPENDS
 		git_gps_devices
-	)
+)
