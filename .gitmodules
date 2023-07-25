@@ -14,10 +14,6 @@
 	path = Tools/simulation/gazebo-classic/sitl_gazebo-classic
 	url = https://github.com/PX4/PX4-SITL_gazebo-classic.git
 	branch = main
-[submodule "src/drivers/gps/devices"]
-	path = src/drivers/gps/devices
-	url = https://github.com/PX4/PX4-GPSDrivers.git
-	branch = main
 [submodule "platforms/nuttx/NuttX/nuttx"]
 	path = platforms/nuttx/NuttX/nuttx
 	url = https://github.com/PX4/NuttX.git
@@ -62,3 +58,6 @@
 	path = src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client
 	url = https://github.com/PX4/Micro-XRCE-DDS-Client.git
 	branch = px4
+[submodule "src/drivers/gps/devices"]
+	path = src/drivers/gps/devices
+	url = https://github.com/septentrio-gnss/Septentrio-PX4-GNSSDrivers.git
