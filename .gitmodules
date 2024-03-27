@@ -17,6 +17,7 @@
 [submodule "src/drivers/gps/devices"]
 	path = src/drivers/gps/devices
 	url = https://github.com/septentrio-gnss/Septentrio-PX4-GNSSDrivers
+	branch = release/1.14.0-septentrio
 [submodule "platforms/nuttx/NuttX/nuttx"]
 	path = platforms/nuttx/NuttX/nuttx
 	url = https://github.com/PX4/NuttX.git
