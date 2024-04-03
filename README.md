@@ -1,4 +1,4 @@
-![](docs/px4_septentrio_banner.png "PX4 Septentrio banner")
+![](docs/images/px4_septentrio_banner.png "PX4 Septentrio banner")
 
 > The official project can be found in [this repository on
 > GitHub](https://github.com/px4/px4-autopilot)

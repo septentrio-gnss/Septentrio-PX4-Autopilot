@@ -17,9 +17,9 @@ The first step is to connect the receiver to your autopilot hardware. There are 
 receivers and autopilots. Therefore it is important to consult the documentation for your specific
 hardware to know what connector is needed. Below are two example setups.
 
-| Pixhawk 4 & mosaic-go                    | Pixhawk 4 & RIB Board              |
-|:----------------------------------------:|:----------------------------------:|
-| ![](hardware_setup/mosaic_go_wiring.png) | ![](hardware_setup/rib_wiring.png) |
+| Pixhawk 4 & mosaic-go                           | Pixhawk 4 & RIB Board                     |
+|:-----------------------------------------------:|:-----------------------------------------:|
+| ![](images/hardware_setup/mosaic_go_wiring.png) | ![](images/hardware_setup/rib_wiring.png) |
 
 1. Power the receiver with at least 3.3V, using either a USB connector or power from the connection
    to the autopilot
@@ -32,14 +32,14 @@ hardware to know what connector is needed. Below are two example setups.
 **When using a mosaic-go, make sure the JST cable is wired correctly as it is not a standard cable.
 Below is the wiring diagram.**
 
-<img src="hardware_setup/jst_cable.png" alt="JST Cable Diagram" width="600" />
+<img src="images/hardware_setup/jst_cable.png" alt="JST Cable Diagram" width="600" />
 
 ### Dual Antenna
 
 The attitude (vehicle orientation) can be computed by the receiver and provided to the autopilot
 based on the baseline between the main and auxiliary GNSS antennas.
 
-<img src="hardware_setup/multi_antenna_attitude_setup.png" alt="Multi-antenna attitude determination setup" height="300"/>
+<img src="images/hardware_setup/multi_antenna_attitude_setup.png" alt="Multi-antenna attitude determination setup" height="300"/>
 
 To enable multi-antenna attitude, follow the steps below:
 
@@ -72,11 +72,11 @@ The receiver includes an intuitive web user interface for easy operation and mon
 to control the receiver from any mobile device or computer. The web interface also uses easy-to-read
 quality indicators ideal to monitor the receiver operation during the job at hand.
 
-![Septentrio web user interface](software/septentrio_receiver_web_ui.png)
+![Septentrio web user interface](images/software/septentrio_receiver_web_ui.png)
 
 ## PX4 Setup
 
-![QGroundControl parameter settings](software_setup/qgc_param.png)
+![QGroundControl parameter settings](images/software_setup/qgc_param.png)
 
 ### Single Antenna Setup
 
