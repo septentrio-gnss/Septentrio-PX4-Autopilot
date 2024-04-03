@@ -15,19 +15,18 @@ to work with a [Septentrio receiver](https://web.septentrio.com/GH-SSN-RX).
 
 The first step is to connect the receiver to your autopilot hardware. There are many types of
 receivers and autopilots. Therefore it is important to consult the documentation for your specific
-hardware to know what connector is needed. Below are two example setups.
+hardware to know what connector is needed.
+
+Below are two example setups.
 
 | Pixhawk 4 & mosaic-go                           | Pixhawk 4 & RIB Board                     |
 |:-----------------------------------------------:|:-----------------------------------------:|
 | ![](images/hardware_setup/mosaic_go_wiring.png) | ![](images/hardware_setup/rib_wiring.png) |
 
-1. Power the receiver with at least 3.3V, using either a USB connector or power from the connection
+1. Power the receiver with at least 5V, using either a USB connector or power from the connection
    to the autopilot
 2. Connect one or two GNSS antennas to the "RF-IN" ports on the receiver
 3. Connect the receiver to the autopilot hardware like in the diagrams above
-4. In the web interface or with Rx Tools, make sure the receiver's baud rate is set to 115200
-   **Admin > Expert Control > Control Panel > Communication > COM Port Settings** (this is the
-   default value).
 
 **When using a mosaic-go, make sure the JST cable is wired correctly as it is not a standard cable.
 Below is the wiring diagram.**
@@ -86,9 +85,9 @@ Edit the following parameters in the PX4 setup page:
 |-----------------|------------------|------------------|---------------------|
 | GPS_1_CONFIG    | GPS 1            | GPS 1            | GPS 1               |
 | GPS_AUTO_CONFIG | \/               | \/               | Enabled             |
-| GPS_1_GNSS      | 31               | 31               | 0 (unused)          |
+| GPS_1_GNSS      | 31               | 31               | 31 (unused)         |
 | GPS_1_PROTOCOL  | Septentrio (SBF) | Septentrio (SBF) | Septentrio (SBF)    |
-| SER_GPS1_BAUD   | 115200 8N1       |  115200 8N1      | 115200 8N1          |
+| SER_GPS1_BAUD   | 115200 8N1       | 115200 8N1       | 115200 8N1          |
 
 Go to **Tools > Reboot Vehicle**
 
@@ -96,17 +95,17 @@ Go to **Tools > Reboot Vehicle**
 
 Edit the following parameters in the PX4 setup page:
 
-|                  | v1.13.0              | v1.14.0              | v1.14.0-septentrio1  |
-|------------------|----------------------|----------------------|----------------------|
-| GPS_1_CONFIG     | GPS 1                | GPS 1                | GPS 1                |
-| GPS_AUTO_CONFIG  | \/                   | \/                   | Enabled              |
-| GPS_1_GNSS       | 31                   | 31                   | 0 (unused)           |
-| GPS_1_PROTOCOL   | Septentrio (SBF)     | Septentrio (SBF)     | Septentrio (SBF)     |
-| GPS_PITCH_OFFSET | Set accordingly      | Set accordingly      | Set accordingly      |
-| GPS_YAW_OFFSET   | Set accordingly      | Set accordingly      | Set accordingly      |
-| SER_GPS1_BAUD    | 115200 8N1           | 115200 8N1           | 115200 8N1           |
-| EKF2_AID_MASK    | Use GPS & GPS fusion | \/                   | \/                   |
-| EKF2_GPS_CTRL    |                      | Dual antenna heading | Dual antenna heading |
+|                  | v1.13.0              | v1.14.0                        | v1.14.0-septentrio1            |
+|------------------|----------------------|--------------------------------|--------------------------------|
+| GPS_1_CONFIG     | GPS 1                | GPS 1                          | GPS 1                          |
+| GPS_AUTO_CONFIG  | \/                   | \/                             | Enabled                        |
+| GPS_1_GNSS       | 31                   | 31                             | 31 (unused)                    |
+| GPS_1_PROTOCOL   | Septentrio (SBF)     | Septentrio (SBF)               | Septentrio (SBF)               |
+| GPS_PITCH_OFFSET | Set accordingly      | Set accordingly                | Set accordingly                |
+| GPS_YAW_OFFSET   | Set accordingly      | Set accordingly                | Set accordingly                |
+| SER_GPS1_BAUD    | 115200 8N1           | 115200 8N1                     | 115200 8N1                     |
+| EKF2_AID_MASK    | Use GPS & GPS fusion | \/                             | \/                             |
+| EKF2_GPS_CTRL    |                      | Dual antenna heading (include) | Dual antenna heading (include) |
 
 Go to **Tools > Reboot Vehicle**
 
