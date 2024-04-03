@@ -82,12 +82,13 @@ quality indicators ideal to monitor the receiver operation during the job at han
 
 Edit the following parameters in the PX4 setup page:
 
-|                | v1.13.0          | v1.14.0          | v1.14.0-septentrio1 |
-|----------------|------------------|------------------|---------------------|
-| GPS_1_CONFIG   | GPS 1            | GPS 1            | GPS 1               |
-| GPS_1_GNSS     | 31               | 31               | 0 (unused)          |
-| GPS_1_PROTOCOL | Septentrio (SBF) | Septentrio (SBF) | Septentrio (SBF)    |
-| SER_GPS1_BAUD  | 115200 8N1       |  115200 8N1      | 115200 8N1          |
+|                 | v1.13.0          | v1.14.0          | v1.14.0-septentrio1 |
+|-----------------|------------------|------------------|---------------------|
+| GPS_1_CONFIG    | GPS 1            | GPS 1            | GPS 1               |
+| GPS_AUTO_CONFIG | \/               | \/               | Enabled             |
+| GPS_1_GNSS      | 31               | 31               | 0 (unused)          |
+| GPS_1_PROTOCOL  | Septentrio (SBF) | Septentrio (SBF) | Septentrio (SBF)    |
+| SER_GPS1_BAUD   | 115200 8N1       |  115200 8N1      | 115200 8N1          |
 
 Go to **Tools > Reboot Vehicle**
 
@@ -98,6 +99,7 @@ Edit the following parameters in the PX4 setup page:
 |                  | v1.13.0              | v1.14.0              | v1.14.0-septentrio1  |
 |------------------|----------------------|----------------------|----------------------|
 | GPS_1_CONFIG     | GPS 1                | GPS 1                | GPS 1                |
+| GPS_AUTO_CONFIG  | \/                   | \/                   | Enabled              |
 | GPS_1_GNSS       | 31                   | 31                   | 0 (unused)           |
 | GPS_1_PROTOCOL   | Septentrio (SBF)     | Septentrio (SBF)     | Septentrio (SBF)     |
 | GPS_PITCH_OFFSET | Set accordingly      | Set accordingly      | Set accordingly      |
@@ -107,6 +109,14 @@ Edit the following parameters in the PX4 setup page:
 | EKF2_GPS_CTRL    |                      | Dual antenna heading | Dual antenna heading |
 
 Go to **Tools > Reboot Vehicle**
+
+### Automatic Configuration
+
+By default, PX4 automatically sets up the connected receiver when all parameters are correct. This
+can be disabled by setting `GPS_AUTO_CONFIG` to `Disabled`, which can be useful when the receiver is
+used for other purposes than autopilots alone. In that case, it may be the easiest to connect the
+receiver to the autopilot first, let the autopilot set it up, and then disable autoconfig in order
+to not overwrite custom configuration on top of the automatic autopilot one.
 
 ## LED Status
 
