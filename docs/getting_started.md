@@ -13,6 +13,10 @@ to work with a [Septentrio receiver](https://web.septentrio.com/GH-SSN-RX).
 
 ## Hardware Setup
 
+The first step is to connect the receiver to your autopilot hardware. There are many types of
+receivers and autopilots. Therefore it is important to consult the documentation for your specific
+hardware to know what connector is needed. Below are two example setups.
+
 | Pixhawk 4 & mosaic-go                    | Pixhawk 4 & RIB Board              |
 |:----------------------------------------:|:----------------------------------:|
 | ![](hardware_setup/mosaic_go_wiring.png) | ![](hardware_setup/rib_wiring.png) |
@@ -25,15 +29,15 @@ to work with a [Septentrio receiver](https://web.septentrio.com/GH-SSN-RX).
    **Admin > Expert Control > Control Panel > Communication > COM Port Settings** (this is the
    default value).
 
-**For the mosaic-go setup, make sure the JST cable is wired correctly (since this is not a standard
-cable):**
+**When using a mosaic-go, make sure the JST cable is wired correctly as it is not a standard cable.
+Below is the wiring diagram.**
 
 <img src="hardware_setup/jst_cable.png" alt="JST Cable Diagram" width="600" />
 
 ### Dual Antenna
 
-The attitude can be computed by the receiver and provided to the autopilot based on the baseline
-between the main and auxiliary GNSS antennas.
+The attitude (vehicle orientation) can be computed by the receiver and provided to the autopilot
+based on the baseline between the main and auxiliary GNSS antennas.
 
 <img src="hardware_setup/multi_antenna_attitude_setup.png" alt="Multi-antenna attitude determination setup" height="300"/>
 
@@ -78,12 +82,12 @@ quality indicators ideal to monitor the receiver operation during the job at han
 
 Edit the following parameters in the PX4 setup page:
 
-|                | v1.13.0          | v1.14.0          |
-|----------------|------------------|------------------|
-| GPS_1_CONFIG   | GPS 1            | GPS 1            |
-| GPS_1_GNSS     | 31               | 31               |
-| GPS_1_PROTOCOL | Septentrio (SBF) | Septentrio (SBF) |
-| SER_GPS1_BAUD  | 115200 8N1       |  115200 8N1      |
+|                | v1.13.0          | v1.14.0          | v1.14.0-septentrio1 |
+|----------------|------------------|------------------|---------------------|
+| GPS_1_CONFIG   | GPS 1            | GPS 1            | GPS 1               |
+| GPS_1_GNSS     | 31               | 31               | 0 (unused)          |
+| GPS_1_PROTOCOL | Septentrio (SBF) | Septentrio (SBF) | Septentrio (SBF)    |
+| SER_GPS1_BAUD  | 115200 8N1       |  115200 8N1      | 115200 8N1          |
 
 Go to **Tools > Reboot Vehicle**
 
@@ -91,14 +95,14 @@ Go to **Tools > Reboot Vehicle**
 
 Edit the following parameters in the PX4 setup page:
 
-|                  | v1.13.0              | v1.14.0              | v1.14.0-septentrio   |
+|                  | v1.13.0              | v1.14.0              | v1.14.0-septentrio1  |
 |------------------|----------------------|----------------------|----------------------|
 | GPS_1_CONFIG     | GPS 1                | GPS 1                | GPS 1                |
-| GPS_1_GNSS       | 31                   | 31                   | \/                   |
+| GPS_1_GNSS       | 31                   | 31                   | 0 (unused)           |
 | GPS_1_PROTOCOL   | Septentrio (SBF)     | Septentrio (SBF)     | Septentrio (SBF)     |
 | GPS_PITCH_OFFSET | Set accordingly      | Set accordingly      | Set accordingly      |
 | GPS_YAW_OFFSET   | Set accordingly      | Set accordingly      | Set accordingly      |
-| SER_GPS1_BAUD    | 115200 8N1           | 115200 8N1           | \/                   |
+| SER_GPS1_BAUD    | 115200 8N1           | 115200 8N1           | 115200 8N1           |
 | EKF2_AID_MASK    | Use GPS & GPS fusion | \/                   | \/                   |
 | EKF2_GPS_CTRL    |                      | Dual antenna heading | Dual antenna heading |
 
