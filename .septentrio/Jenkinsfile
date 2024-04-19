@@ -49,7 +49,7 @@ pipeline {
                     def boards_value = "${params.BOARDS}"
                     def boards_split = boards_value.split(' ')
                     for (board in boards_split) {
-                        archiveArtifacts( artifacts: "build/${board}/bin/arducopter.apj", followSymlinks: false)
+                        archiveArtifacts( artifacts: "build/${board}/${board}.px4", followSymlinks: false)
                     }
                 }
             }
