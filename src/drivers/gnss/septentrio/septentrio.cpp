@@ -50,7 +50,9 @@
 #include <drivers/drv_hrt.h>
 #include <mathlib/mathlib.h>
 #include <matrix/math.hpp>
+#include <parameters/param.h>
 #include <px4_platform_common/defines.h>
+#include <px4_platform_common/log.h>
 #include <px4_platform_common/time.h>
 #include <uORB/topics/gps_inject_data.h>
 
@@ -193,6 +195,7 @@ int SeptentrioGPS::print_status()
 
 void SeptentrioGPS::run()
 {
+	int32_t automatic_configuration = 1;
 	uint64_t last_rate_measurement = hrt_absolute_time();
 	unsigned last_rate_count = 0;
 	param_t handle = param_find("SEP_YAW_OFFS");
@@ -228,10 +231,13 @@ void SeptentrioGPS::run()
 			_output_mode = SeptentrioGPSOutputMode::GPS;
 		}
 
-		// If configuration is successful, start processing messages.
-		if (configure(heading_offset) == 0) {
+		set_baudrate(RECEIVER_BAUD_RATE);
 
-			PX4_INFO("Automatic configuration finished");
+		handle = param_find("SEP_AUTO_CONFIG");
+		param_get(handle, &automatic_configuration);
+
+		// If configuration is successful or not requested, start processing messages.
+		if (automatic_configuration == 0 || configure(heading_offset) == 0) {
 
 			// Reset report
 			memset(&_report_gps_pos, 0, sizeof(_report_gps_pos));
@@ -623,8 +629,6 @@ int SeptentrioGPS::configure(float heading_offset)
 		param_get(handle, &pitch_offset);
 	}
 
-	set_baudrate(RECEIVER_BAUD_RATE);
-
 	send_message(SBF_FORCE_INPUT);
 
 	if (detect_serial_port(com_port) != PX4_OK)
@@ -677,6 +681,8 @@ int SeptentrioGPS::configure(float heading_offset)
 	}
 
 	_configured = true;
+
+	PX4_INFO("Automatic configuration finished");
 
 	return PX4_OK;
 }

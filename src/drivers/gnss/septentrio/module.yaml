@@ -78,3 +78,10 @@ parameters:
           0: Disable
           1: Full communication
           2: RTCM output (PPK)
+      SEP_AUTO_CONFIG:
+        description:
+          short: Enable automatic receiver configuration
+          long: |
+            Enable automatic configuration of the GPS receivers.
+        type: boolean
+        default: 1
