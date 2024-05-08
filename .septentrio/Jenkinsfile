@@ -1,0 +1,58 @@
+pipeline {
+    triggers {
+        // Poll the Git repository every 5 minutes to detect changes.
+        pollSCM('H/5 * * * *')
+    }
+    // Run stages without specified agent on any available agent.
+    agent any
+    // Parameters used for manual builds triggered in the Jenkins web UI.
+    parameters {
+        string(name: 'BOARDS', defaultValue: 'cubepilot_cubeorangeplus_default px4_fmu-v6c_default', description: 'A space-separated list of boards to build for')
+    }
+    // Options for the pipeline.
+    options {
+        // Discard old builds to save space.
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '1', numToKeepStr: '')
+    }
+    stages {
+        // Build the Docker image, mount the repository as a volume in Docker and build inside the Docker container
+        stage('Build') {
+            environment {
+                CCACHE_DIR = ".ccache"
+            }
+            agent {
+                docker {
+                    image 'px4io/px4-dev-nuttx-focal:2022-08-12'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh "mkdir -p .ccache"
+                sh "git config user.name 'Thomas Frans'"
+                sh "git config user.email 'thomas.frans@septentrio.com'"
+                // Tags need a specific name, otherwise the build fails.
+                sh "git tag | xargs git tag -d"
+                // The name and version doesn't matter really.
+                sh "git tag -a 'v1.14.0' -m 'v1.14.0-septentrio1' --no-sign"
+                script {
+                    def boards_value = "${params.BOARDS}"
+                    def boards_split = boards_value.split(' ')
+                    for (board in boards_split) {
+                        sh "make ${board}"
+                    }
+                }
+            }
+        }
+        stage('Archive'){
+            steps{
+                script {
+                    def boards_value = "${params.BOARDS}"
+                    def boards_split = boards_value.split(' ')
+                    for (board in boards_split) {
+                        archiveArtifacts( artifacts: "build/${board}/${board}.px4", followSymlinks: false)
+                    }
+                }
+            }
+        }
+    }
+}
