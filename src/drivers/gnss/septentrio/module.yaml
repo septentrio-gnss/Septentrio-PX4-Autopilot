@@ -85,38 +85,3 @@ parameters:
             Enable automatic configuration of the GPS receivers.
         type: boolean
         default: 1
-      SEP_LOG_HZ:
-        description:
-          short: Logging frequency for the receiver
-          long: |
-            Select the frequency at which the connected receiver should log data.
-        type: float
-        default: 1
-        min: 0
-        max: 20
-        unit: Hz
-        decimal: 1
-        reboot_required: true
-      SEP_LOG_LEVEL:
-        description:
-          short: Logging level for the receiver
-          long: |
-            Select the level of detail that needs to be logged by the receiver.
-        type: enum
-        default: 2
-        min: 0
-        max: 3
-        values:
-          0: Lite
-          1: Basic
-          2: Default
-          3: Full
-        reboot_required: true
-      SEP_LOG_FORCE:
-        description:
-          short: Whether to overwrite or add to existing logging
-          long: |
-            When the receiver is already set up to log data, this decides whether extra logged data should be added or overwrite existing data.
-        type: boolean
-        default: false
-        reboot_required: true

@@ -44,7 +44,6 @@
 #include "septentrio.h"
 
 #include <cmath>
-#include <cstdio>
 #include <ctime>
 #include <string.h>
 #include <termios.h>
@@ -73,7 +72,6 @@ using namespace time_literals;
 #define SBF_CONFIG_TIMEOUT      1000    ///< Timeout for waiting on ACK in ms
 #define SBF_PACKET_TIMEOUT      2       ///< If no data during this delay (in ms) assume that full update received
 #define MSG_SIZE                100     ///< Size of the message to be sent to the receiver
-#define LOG_MSG_SIZE            200     ///< Size of log message to be sent to the receiver
 #define TIMEOUT_5HZ             500     ///< Timeout time in mS, 1000 mS (1Hz) + 300 mS delta for error
 #define RATE_MEASUREMENT_PERIOD 5_s     ///< Rate at which bandwith measurements are taken
 #define RECEIVER_BAUD_RATE      115200  ///< The baudrate of the serial connection to the receiver
@@ -99,16 +97,6 @@ using namespace time_literals;
 
 #define SBF_CONFIG "setSBFOutput, Stream1, %s, PVTGeodetic+VelCovGeodetic+DOP+AttEuler+AttCovEuler, msec100\n" /**< Configure the correct blocks for GPS positioning and heading */
 
-/**
- * Configure logging on stream 4.
- * The first argument %s defines overwrite behavior.
- * The second argument %s are the blocks that should be output.
- * The third argument %s is the frequency at which they need to be output.
- */
-#define SBF_CONFIG_LOGGING "setSBFOutput, Stream4, DSK1, %s%s, %s\n"
-
-#define SBF_CONFIG_LOGGING_FILENAME "setFileNaming, DSK1, Incremental, px4\n"
-
 #define SBF_CONFIG_BAUDRATE "setCOMSettings, %s, baud%d\n"
 
 #define SBF_CONFIG_RESET "setSBFOutput, Stream1, %s, none, off\n"
@@ -118,25 +106,6 @@ using namespace time_literals;
 #define SBF_CONFIG_ATTITUDE_OFFSET "setAttitudeOffset, %.3f, %.3f\n"
 
 #define SBF_DATA_IO "setDataInOut, %s, Auto, SBF\n"
-
-#define SBF_LOGGING_LITE    "Comment+ReceiverStatus"
-#define SBF_LOGGING_BASIC   "Comment+ReceiverStatus+PostProcess+Event"
-#define SBF_LOGGING_DEFAULT "Comment+ReceiverStatus+PostProcess+Event+Support"
-#define SBF_LOGGING_FULL    "Comment+ReceiverStatus+PostProcess+Event+Support+BBSamples"
-
-#define SBF_0_1_HZ  "sec10"
-#define SBF_0_2_HZ  "sec5"
-#define SBF_0_5_HZ  "sec2"
-#define SBF_1_0_HZ  "sec1"
-#define SBF_2_0_HZ  "msec500"
-#define SBF_5_0_HZ  "msec200"
-#define SBF_10_0_HZ "msec100"
-#define SBF_20_0_HZ "msec50"
-
-#define SBF_LOGGING_LEVEL_LITE    0
-#define SBF_LOGGING_LEVEL_BASIC   1
-#define SBF_LOGGING_LEVEL_DEFAULT 2
-#define SBF_LOGGING_LEVEL_FULL    3
 
 static constexpr int SEP_SET_CLOCK_DRIFT_TIME_S{5}; ///< RTC drift time when time synchronization is needed (in seconds)
 
@@ -651,12 +620,10 @@ int SeptentrioGPS::configure(float heading_offset)
 	char com_port[5] {};
 	float pitch_offset = 0.f;
 	char msg[MSG_SIZE];
-	param_t handle = param_find("SEP_PITCH_OFFS");
-	float logging_frequency = 1;
-	int32_t logging_level = SBF_LOGGING_LEVEL_DEFAULT;
-	int32_t logging_overwrite = 0;
 
 	_configured = false;
+
+	param_t handle = param_find("SEP_PITCH_OFFS");
 
 	if (handle != PARAM_INVALID) {
 		param_get(handle, &pitch_offset);
@@ -712,66 +679,6 @@ int SeptentrioGPS::configure(float heading_offset)
 		PX4_ERR("Failed to configure SBF");
 		return PX4_ERROR;
 	}
-
-	param_get(param_find("SEP_LOG_HZ"), &logging_frequency);
-	param_get(param_find("SEP_LOG_LEVEL"), &logging_level);
-	param_get(param_find("SEP_LOG_FORCE"), &logging_overwrite);
-
-	if (logging_frequency <= 0.f) {
-		if (logging_overwrite) {
-			// hard-disable logging, clear existing stream
-			send_message_and_wait_for_ack("setSBFOutput,Stream4,none,none,off\n", SBF_CONFIG_TIMEOUT);
-		} else {
-			// soft-disable logging, keep existing stream
-			send_message_and_wait_for_ack("setSBFOutput,Stream4,,,off\n", SBF_CONFIG_TIMEOUT);
-		}
-	} else {
-		const char* logging_frequency_msg;
-		const char* logging_blocks_msg;
-		char logging_msg[LOG_MSG_SIZE];
-
-		switch (logging_level) {
-			case SBF_LOGGING_LEVEL_LITE:
-				logging_blocks_msg = SBF_LOGGING_LITE;
-			break;
-			case SBF_LOGGING_LEVEL_BASIC:
-				logging_blocks_msg = SBF_LOGGING_BASIC;
-			break;
-			default:
-			case SBF_LOGGING_LEVEL_DEFAULT:
-				logging_blocks_msg = SBF_LOGGING_DEFAULT;
-			break;
-			case SBF_LOGGING_LEVEL_FULL:
-				logging_blocks_msg = SBF_LOGGING_FULL;
-			break;
-		}
-
-		if (logging_frequency <= 0.1f) {
-			logging_frequency_msg = SBF_0_1_HZ;
-		} else if (logging_frequency <= 0.2f) {
-			logging_frequency_msg = SBF_0_2_HZ;
-		} else if (logging_frequency <= 0.5f) {
-			logging_frequency_msg = SBF_0_5_HZ;
-		} else if (logging_frequency <= 1.0f) {
-			logging_frequency_msg = SBF_1_0_HZ;
-		} else if (logging_frequency <= 2.0f) {
-			logging_frequency_msg = SBF_2_0_HZ;
-		} else if (logging_frequency <= 5.0f) {
-			logging_frequency_msg = SBF_5_0_HZ;
-		} else if (logging_frequency <= 10.0f) {
-			logging_frequency_msg = SBF_10_0_HZ;
-		} else {
-			logging_frequency_msg = SBF_20_0_HZ;
-		}
-
-		snprintf(logging_msg, sizeof(logging_msg), SBF_CONFIG_LOGGING,
-			logging_overwrite ? "" : "+",
-			logging_blocks_msg, logging_frequency_msg);
-
-		// needs to be sent first, otherwise we have a small file gathering some data every so often
-		send_message_and_wait_for_ack(SBF_CONFIG_LOGGING_FILENAME, SBF_CONFIG_TIMEOUT);
-		send_message_and_wait_for_ack(logging_msg, SBF_CONFIG_TIMEOUT);
-        }
 
 	_configured = true;
 
