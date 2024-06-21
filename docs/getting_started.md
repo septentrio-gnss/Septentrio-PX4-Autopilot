@@ -50,8 +50,8 @@ To enable multi-antenna attitude, follow the steps below:
 2. In practice, the two antenna ARPs may not be exactly at the same height in the vehicle frame, or
    the main-aux1 baseline may not be exactly parallel or perpendicular to the longitudinal axis of
    the vehicle. This leads to offsets in the computed attitude angles. These offsets can be
-   compensated for with the `GPS_YAW_OFFSET` and `GPS_PITCH_OFFSET` parameters, which can be set
-   from your ground control station.
+   compensated for with the yaw and pitch offset parameters, which can be set from your ground
+   control station.
 
 _For optimal heading results, the two antennas should be seperated at least 30 cm / 11.8 in (ideally
 50 cm / 19.7 in or more)_
@@ -89,6 +89,14 @@ Edit the following parameters in the PX4 setup page:
 | GPS_1_PROTOCOL  | Septentrio (SBF) | Septentrio (SBF) | Septentrio (SBF)    |
 | SER_GPS1_BAUD   | 115200 8N1       | 115200 8N1       | 115200 8N1          |
 
+|                 | v1.15.0-beta1-septentrio1 |
+|-----------------|---------------------------|
+| SEP_AUTO_CONFIG | Enabled                   |
+| SEP_HARDW_SETUP | Default                   |
+| SEP_OUTP_HZ     | 10 Hz                     |
+| SEP_PORT1_CFG   | GPS1                      |
+| SER_GPS1_BAUD   | Auto                      |
+
 Go to **Tools > Reboot Vehicle**
 
 ### Dual Antenna Setup
@@ -107,15 +115,29 @@ Edit the following parameters in the PX4 setup page:
 | EKF2_AID_MASK    | Use GPS & GPS fusion | \/                             | \/                             |
 | EKF2_GPS_CTRL    |                      | Dual antenna heading (include) | Dual antenna heading (include) |
 
+|                 | v1.15.0-beta1-septentrio1 |
+|-----------------|---------------------------|
+| SEP_AUTO_CONFIG | Enabled                   |
+| SEP_HARDW_SETUP | Default/Moving base       |
+| SEP_OUTP_HZ     | 10 Hz                     |
+| SEP_PORT1_CFG   | GPS1                      |
+| SEP_PORT2_CFG   | GPS2 (if moving base)     |
+| SEP_PITCH_OFFS  | Set accordingly           |
+| SEP_YAW_OFFS    | Set accordingly           |
+| SER_GPS1_BAUD   | Auto                      |
+| SER_GPS1_BAUD   | Auto (if moving base)     |
+| SEP_YAW_OFFS    | Set accordingly           |
+
 Go to **Tools > Reboot Vehicle**
 
 ### Automatic Configuration
 
 By default, PX4 automatically sets up the connected receiver when all parameters are correct. This
-can be disabled by setting `GPS_AUTO_CONFIG` to `Disabled`, which can be useful when the receiver is
-used for other purposes than autopilots alone. In that case, it may be the easiest to connect the
-receiver to the autopilot first, let the autopilot set it up, and then disable autoconfig in order
-to not overwrite custom configuration on top of the automatic autopilot one.
+can be disabled by setting the automatic configuration parameter to `Disabled`, which can be useful
+when the receiver is used for other purposes than autopilots alone. In that case, it may be the
+easiest to connect the receiver to the autopilot first, let the autopilot set it up, and then
+disable autoconfig in order to not overwrite custom configuration on top of the automatic autopilot
+one.
 
 ## LED Status
 

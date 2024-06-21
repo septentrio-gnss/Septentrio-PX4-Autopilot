@@ -22,7 +22,9 @@ end, like `v1.14.0-septentrio2` or `v1.14.0-septentrio3`. You can download these
 on your board using QGroundControl, after which you are ready to fly!
 
 To get started with PX4 and a Septentrio receiver, see the [getting started
-guide](docs/getting_started.md).
+guide](docs/getting_started.md). For the latest version, [the official user
+guide](https://docs.px4.io/main/en/gps_compass/septentrio.html) also contains all the necessary
+steps.
 
 **Septentrio only tests specific versions on specific boards. These will be marked as tested. All
 the other builds are provided without any testing.**
